@@ -1,0 +1,28 @@
+/* basic styles */
+
+body {
+	font-family: Arial, Verdana;
+	color: #494949;
+	font-size: 12px;
+	margin: 0px;
+	background-image: url(bggrey.png);
+}
+
+a {
+	text-decoration: none;
+}
+
+
+/* overall styles */
+
+.clear{
+	clear: both;
+}
+
+.wrapper{
+  width: 980px;
+  background-color: #C8C8C8;
+  margin: 100px auto 0 auto;
+  padding: 10px;
+  border: 1px solid green;
+}
