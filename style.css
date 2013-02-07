@@ -26,3 +26,10 @@ a {
   padding: 10px;
   border: 1px solid green;
 }
+
+.login_er{
+	color: red;
+	font-weight: bold;
+	display: block;
+	margin: 0 0 10px 0;
+}

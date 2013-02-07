@@ -1,15 +1,14 @@
-print "\n";
-
 #Start includes
 require "func.pl";
 
-#Test auth
-$logged = undef;
-
 #Start initializations
 &connect; #connect to database
-&checklogin;
+&checklogged; #checking sess login;
 
+if($p->param('request_logout')) {&req_logout}; # check $posts for logout
+if($p->param('request_login')) {&req_login}; # check $posts for login
+
+print "\n";
 print "<!DOCTYPE html>
 <html lang='pl'>
 
@@ -29,7 +28,9 @@ print "<!DOCTYPE html>
 
 print "<body>";
 
-# Warunek zalogowania, if NOT - display form
+print "<div class='wrapper'>";
+
+#Condition to showing main or login form
 if($logged) {require "main.pl";}
 else {require "login.pl";}
 
