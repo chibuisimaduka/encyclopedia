@@ -33,3 +33,30 @@ a {
 	display: block;
 	margin: 0 0 10px 0;
 }
+
+.search_result{
+  display: block;
+}
+
+.search_result ul{
+  list-style-type: none;
+  margin: 0px;
+  padding: 0px;
+}
+
+.search_result li > div{
+  float :left;
+}
+
+.search_result li > div.cont{
+  width: 850px;
+}
+
+.search input[name=search]{
+  display: block;
+  margin: 0 0 5px 0;
+}
+
+.search input[type=submit]{
+  display: block;
+}

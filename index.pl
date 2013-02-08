@@ -19,7 +19,7 @@ print "<!DOCTYPE html>
 	<meta name='keywords' content='' />
 
 	<!-- CSS -->
-	<link rel='stylesheet' href='style.css' type='text/css' />
+	<link rel='stylesheet' href='/style.css' type='text/css' />
 	<!--. CSS -->
 
 	<title>Encyclopedia project</title>
@@ -31,7 +31,9 @@ print "<body>";
 print "<div class='wrapper'>";
 
 #Condition to showing main or login form
-if($logged) {require "main.pl";}
+if($logged) {&includer;}
 else {require "login.pl";}
 
 print "</div></body></html>";
+
+$db->disconnect();

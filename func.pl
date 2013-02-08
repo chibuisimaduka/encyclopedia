@@ -3,6 +3,7 @@
 # Libs
 use DBI;
 use CGI;
+use Switch;
 use CGI::Session;
 use CGI qw/:standard/;
 
@@ -14,8 +15,6 @@ $p = new CGI;
 
 $data{"email"} = $p->param('email');
 $data{"pass"} = $p->param('pass');
-
-#print $data{"email"};
 
 #############################################################################
 
@@ -30,6 +29,9 @@ sub connect {
   $conf = "DBI:$driver:database=$database;host=$hostname;port=$port";
   
   $db = DBI->connect($conf, $user, $password);
+
+  $tmp = $db->prepare("SET NAMES 'utf8'");
+  $tmp->execute();
 }
 
 #Make hash
@@ -50,19 +52,31 @@ sub checklogged {
 	}
 }
 
+#Manage includes (by $_GET from .htaccess)
+sub includer{
+  
+  switch ($p->param('act')) {
+    case "w"  {require "word.pl";}
+    case "e"  {require "edit.pl";}
+    case "d"  {require "delete.pl";}
+    case "a"  {require "add.pl";}
+    else     {require "main.pl";}
+  }
+  
+}
+
 #Start session after valid data
 sub start_ses {
 	$session = new CGI::Session(undef, undef, {Directory=>"/tmp"});
 	$session->param("id", $_[0]);
 	$session->param("user", $_[1]);
-	$session->flush();
-	
-	my $cookie = cookie(
+
+  my $cookie = cookie(
 	-name=>'encyclopedia',
 	value=>$session->id,
 	-expires=>'+1h');
-print header(-cookie=>$cookie);
-	
+  print header(-cookie=>$cookie, -charset=>"utf-8");
+
 	$logged = 1;
 }
 
@@ -71,7 +85,7 @@ sub req_login {
 		
 		$q = $db->prepare("SELECT id, CONCAT(name,' ',surname) as user FROM users WHERE email='".$data{"email"}."' AND pass='".mhash($data{"pass"})."' ");
 		$q->execute();
-		$r = $q->fetchrow_hashref();
+		my $r = $q->fetchrow_hashref();
 		if($r->{"id"}){
 			start_ses($r->{"id"},$r->{"user"});
 		} else {
@@ -87,5 +101,22 @@ sub req_logout {
 	$status = "Wylogowano";
 	$logged = 0;
 }
+
+#Searcher
+sub req_search {
+  $q = $db->prepare("SELECT * FROM words WHERE (word LIKE '%".$p->param('search')."%') OR (description LIKE '%".$p->param('search')."%') ");
+  $q->execute();
+  while (my $res = $q->fetchrow_hashref()){
+    print "<li><div class='cont'><a href='/w/".$res->{'id'}."/".$res->{'slug'}."'><b>".$res->{'word'}."</b> - <i>".$res->{'description'}."</i></a></div><div class='func'><a href='/e/".$res->{'id'}."/".$res->{'slug'}."'>edytuj</a> | <a href='/d/".$res->{'id'}."'>usuń</a></div><div class='clear'></div></li>";
+  }
+}
+
+
+
+
+
+
+
+
 
 1;
