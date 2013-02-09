@@ -5,7 +5,7 @@ use DBI;
 use CGI;
 use Switch;
 use CGI::Session;
-use CGI qw/:standard/;
+use CGI qw(:standard);
 
 # Global
 %data = ();
@@ -34,10 +34,36 @@ sub connect {
   $tmp->execute();
 }
 
+#extracting uri to array
+sub extract_uri{
+	my $uri = $ENV{'REQUEST_URI'};
+	@uris = split ('/', $uri);
+	return @uris;
+}
+
 #Make hash
 sub mhash {
 	use Digest::SHA qw(sha1_hex);
 	return sha1_hex("sol".$_[0]."los");
+}
+
+sub mslug($) {
+  use Unicode::Normalize;
+  my ($string) = @_;
+	$string = NFKD($string);
+  $string =~ tr/\000-\177//cd;
+  $string =~ s/[^\w\s-]//g;
+  $string =~ s/^\s+|\s+$//g;
+  $string = lc($string);
+  $string =~ s/[-\s]+/-/g;
+  return $string;
+}
+
+sub rem_dup{
+	my @tmparr = @_[0];
+	my %hash = map { $_ => 1 } @tmparr;
+	@uniq = keys %hash;
+	return @uniq;
 }
 
 # Check is logged
@@ -46,6 +72,13 @@ sub checklogged {
 	$session = new CGI::Session(undef, $rc, {Directory=>"/tmp"});
 	if($session->param("id")){
 		$logged = 1;
+		
+		#Keeping session (add + 10 minutes)
+		my $cookie = cookie(
+		-name=>'encyclopedia',
+		value=>$session->id,
+		-expires=>'+10m');
+		print header(-cookie=>$cookie, -charset=>"utf-8");
 	} else {
 		$logged = 0;
 		$session->delete();
@@ -54,8 +87,10 @@ sub checklogged {
 
 #Manage includes (by $_GET from .htaccess)
 sub includer{
-  
-  switch ($p->param('act')) {
+
+	&extract_uri;
+
+  switch (@uris[1]) {
     case "w"  {require "word.pl";}
     case "e"  {require "edit.pl";}
     case "d"  {require "delete.pl";}
@@ -74,7 +109,7 @@ sub start_ses {
   my $cookie = cookie(
 	-name=>'encyclopedia',
 	value=>$session->id,
-	-expires=>'+1h');
+	-expires=>'+10m');
   print header(-cookie=>$cookie, -charset=>"utf-8");
 
 	$logged = 1;
