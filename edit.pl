@@ -46,9 +46,9 @@ if($p->param('edit')){
 		$q->execute();
 		my $res = $q->fetchrow_hashref();
 		
-		
+		#Looking for the exists word -> protect for replace
 		if($res->{"id"}) {
-			print "Warning: znalazłem już podobne słowo! -> <a href='/w/".$res->{"id"}."/".$res->{"slug"}."'>".$res->{"word"}."</a>";
+			print "<div class='status-info'>UWAGA: znalazłem już podobne słowo! &raquo; <a href='/w/".$res->{"id"}."/".$res->{"slug"}."'>".$res->{"word"}."</a></div><div class='clear'></div>";
 		} else {
 
 		
@@ -74,13 +74,16 @@ if($p->param('edit')){
 				$q = $db->prepare("SELECT * FROM words WHERE id='".@uris[2]."' ");
 				$q->execute();
 				$res = $q->fetchrow_hashref();
-				print "<b>Aktualizacja powiodła się!</b> Przejdź na stronę słowa: <a href='/w/".$res->{"id"}."/".$res->{"slug"}."'>".$res->{"word"}."</a>";
+				print "<div class='status-info success'><b>Aktualizacja powiodła się!</b> Przejdź na stronę słowa: <a href='/w/".$res->{"id"}."/".$res->{"slug"}."'>".$res->{"word"}."</a></div>";
 				$edi->{"relation"} = join(',', @relations);
 				#END updating
 			}
 			
 		}
-	}
+	}  else {
+    #Display if word or description is empty
+		print "<div class='status-info'>UWAGA: Jedno z pól nie zostało wypełnione!</div>";
+	} 
 } else {
 
 #Getting current data of word if not sending changes (on start)
@@ -97,11 +100,11 @@ $edi = $q->fetchrow_hashref();
 ##########################################################################
 
 print "<h1>Aktualizacja słowa: ".$org->{"word"}."</h1>";
-print "<form method='post'>";
+print "<form method='post' class='wedit'>";
 print "<input type='hidden' name='edit' value='1'>";
 print "<input type='hidden' name='relation' value='".$edi->{"relation"}."'>";
-print "<input type='text' name='word' value='".$edi->{"word"}."'><br />";
-print "<textarea name='description' cols='60' rows='5'>".$edi->{"description"}."</textarea><br />";
+print "Słowo:<br /><input type='text' style='font-weight: bold;' name='word' value='".$edi->{"word"}."'><br />";
+print "Deskrypcja: <br /><textarea name='description' cols='60' rows='5'>".$edi->{"description"}."</textarea><br />";
 print "Wybrane relacje: ";
 
 
@@ -110,15 +113,28 @@ if(@relations){
   $q = $db->prepare("SELECT * FROM words WHERE id IN (".join(',', @relations).") ");
   $q->execute();
   while (my $res = $q->fetchrow_hashref()){
-    print "<input type='checkbox' name='dr' value='".$res->{'id'}."'> <a href='/w/".$res->{'id'}."/".$res->{'slug'}."'>".$res->{'word'}."</a> | ";
+    print "<input type='checkbox' name='dr' value='".$res->{'id'}."'> <a href='/w/".$res->{'id'}."/".$res->{'slug'}."'>".$res->{'word'}."</a> ";
   }
 }
 
-print "<br /><input type='text' name='r_word'><input type='submit' name='r_search' value='Szukaj Relacji'>";
-print "<input type='submit' value='Wprowadź zmiany'>";
-print "</form><br><br>";
+#Searcher of relations
+print "
+  <div class='clear'></div>
+  
+  <br />
+  Wyszukaj słowo do powiązania:<br />
+  <input type='text' name='r_word'><input type='submit' name='r_search' value=' '>
+  <div class='clear'></div>
+  
+  <div class='relation-info'>INFO: Zaznaczając dane słowo powiązane, po kliknięciu \"Wprowadź zmiany \" lub \"Szukaj\" Zostanie on usunięty!</div>
+  <div class='clear'></div>
+  
+  <div class='action_but'>
+    <input type='submit' name='wedit' value=' '>
+    <div class='clear'></div>
+  </div>
+  
+</form>";
 
-
-print "<div><a href='/'>&laquo;Powróć do wyszukiwarki</a></div>";
 
 } 1;

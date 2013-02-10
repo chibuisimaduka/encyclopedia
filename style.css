@@ -12,6 +12,10 @@ a {
 	text-decoration: none;
 }
 
+img{
+	border: 0px;
+}
+
 
 /* overall styles */
 
@@ -20,36 +24,95 @@ a {
 }
 
 .wrapper{
-  width: 980px;
+  max-width: 980px;
   background-color: #C8C8C8;
-  margin: 100px auto 0 auto;
+  margin: 0px auto;
   padding: 10px;
-  border: 1px solid green;
+  border: 1px solid white;
 }
 
-.login_er{
-	color: red;
+.footer{
+	max-width: 980px;
+	margin: 0px auto;
+	color: white;
+	padding: 10px 0 20px 0;
+	text-align: center;
+}
+
+.footer b{
+	color: yellow;
+}
+
+.status-info{
+	color: #990000;
+	background-color: #E3E3E3;
 	font-weight: bold;
 	display: block;
 	margin: 0 0 10px 0;
+	border: 1px solid #B7B7B7;
+	border-radius: 7px;
+	padding: 5px;
+	text-align: center;
+}
+
+.status-info a{
+	color: black;
+}
+
+.success {
+	color: green;
+}
+
+.action_but{
+	border-top: 1px dashed #999;
+	margin: 15px 0 0 0;
+	padding: 15px 0 0 0;
+}
+
+/* ### Search ### */
+
+.search .but_wrapper{
+	width: 135px;
+ 	margin: 5px auto 0 auto;
 }
 
 .search_result{
   display: block;
+  margin: 20px 0 0 0;
 }
 
 .search_result ul{
   list-style-type: none;
   margin: 0px;
   padding: 0px;
+  display: block;
 }
 
-.search_result li > div{
+.search_result a.wrd{
+	display: block;
+	padding: 5px;
+	color: #292929;
+	vertical-align: middle;
+}
+
+.search_result li{
+	float: left;
+	background: #B1B1B1;
+	border-bottom: 1px dashed #919191;
+}
+.search_result li:hover{
+	background: #A0A0A0;
+}
+
+.search_result li > div.func{
   float :left;
+  padding: 5px;
 }
 
 .search_result li > div.cont{
-  width: 850px;
+	float: left;
+  width: 880px;
+  padding: 0 20px 0 0;
 }
 
 .search input[name=search]{
@@ -59,4 +122,296 @@ a {
 
 .search input[type=submit]{
   display: block;
+}
+
+.search input[type=text]{
+	padding: 7px;
+	font-weight: bold;
+	width: 400px;
+	border: 1px solid #999;
+	border-radius: 5px;
+	margin: 0px auto;
+}
+
+.search input[type=submit]{
+	display: block;
+	float: left;
+	background: url(/gfxs.png);
+	background-position: 482px 229px;
+	cursor: pointer;
+	width: 63px;
+	height: 29px;
+	border: 0px;
+	margin: 0 5px 0 0;
+}
+.search input[type=submit]:hover{
+	background-position: 387px 229px;
+}
+
+.search a{
+	display: block;
+	float: left;
+	background-image: url(/gfxs.png);
+	background-position: 482px 189px;
+	width: 63px;
+	height: 29px;
+}
+
+.search a:hover{
+	background-position: 387px 189px;
+}
+
+.sm-bar{
+	text-align: center;
+	font-weight: bold;
+	padding: 20px;
+}
+
+
+/* ### Login/logoff ### */
+
+.login {
+	width: 300px;
+	margin: 0px auto;
+}
+
+.login table, tr, td{
+	border: 0px;
+	padding: 0px;
+}
+
+.login input[type=text], .login input[type=password]{
+	padding: 5px;
+	width: 250px;
+	border: 1px solid #999;
+	border-radius: 5px;
+}
+
+.login input[type=submit]{
+	display: block;
+	margin: 5px auto 0px auto;
+	background: url(/gfxs.png);
+	background-position: 482px 152px;
+	cursor: pointer;
+	width: 63px;
+	height: 29px;
+	border: 0px;
+}
+.login input[type=submit]:hover{
+	background-position: 388px 152px;
+}
+
+.logout input[name=logout]{
+	background: url(/gfxs.png);
+	background-position: 471px 272px;
+	cursor: pointer;
+	width: 25px;
+	height: 25px;
+	display: block;
+	border: 0px;
+}
+.logout input[name=logout]:hover{
+	background-position: 387px 272px;
+}
+
+/* ### header ### */
+
+.header-m{
+	margin: 0px auto;
+}
+
+.header-m > .logo {
+	float: left;
+	padding: 20px;
+}
+
+.header-m > .logout {
+	float: right;
+	padding: 20px;
+}
+
+.header-d{
+	margin: 0px auto;
+}
+
+.header-d > .logo{
+	text-align: center;
+}
+
+.header-d > .logo img{
+	margin: 20px 0 10px 0;
+}
+
+.header-d > .logout {
+	float: right;
+	padding: 20px 20px 0px 0px;
+	display: block;
+}
+
+
+/* ### word ### */
+
+
+.word a.edit,
+.search_result a.edit{
+	display: block;
+	float: left;
+	background-image: url(/gfxs.png);
+	background-position: 475px 32px;
+	width: 20px;
+	height: 20px;
+	margin: 0 10px 0 0;
+}
+
+.word a.del,
+.search_result a.del{
+	display: block;
+	float: left;
+	background-image: url(/gfxs.png);
+	background-position: 435px 32px;
+	width: 20px;
+	height: 20px;
+}
+
+.relation-info{
+	font-size: 11px;
+	padding: 4px 7px;
+	border: 1px solid grey;
+	border-radius: 4px;
+	float: left;
+	color: #2877C7;
+	background: #E3E3E3;
+}
+
+.wedit input[name=word], .wedit textarea[name=description],
+.wadd input[name=word], .wadd textarea[name=description]{
+	width: 800px;
+	padding: 5px;
+	border: 1px solid #999;
+	margin: 0 0 10px 0;
+}
+
+.wedit input[name=r_word],
+.wadd input[name=r_word]{
+	width: 400px;
+	padding: 5px;
+	border: 1px solid #999;
+	margin: 0 10px 10px 0;
+	float: left;
+}
+
+.wedit input[name=r_search],
+.wadd input[name=r_search]{
+	display: block;
+	float: left;
+	background: url(/gfxs.png);
+	background-position: 482px 229px;
+	cursor: pointer;
+	width: 63px;
+	height: 29px;
+	border: 0px;
+	margin: 0px;
+}
+.wedit input[name=r_search]:hover,
+.wadd input[name=r_search]:hover{
+	background-position: 387px 229px;
+}
+
+.wedit input[name=wedit]{
+	display: block;
+	background: url(/gfxs.png);
+	background-position: 482px 74px;
+	cursor: pointer;
+	width: 81px;
+	height: 29px;
+	border: 0px;
+	margin: 0px auto;
+}
+.wedit input[name=wedit]:hover{
+	background-position: 387px 74px;
+}
+
+.wadd input[name=wadd]{
+	display: block;
+	background: url(/gfxs.png);
+	background-position: 482px 189px;
+	cursor: pointer;
+	width: 63px;
+	height: 29px;
+	border: 0px;
+	margin: 0px auto;
+}
+.wadd input[name=wadd]:hover{
+	background-position: 387px 189px;
+}
+
+.word h1{
+	margin: 0 0 5px 0;
+	padding: 0px;
+}
+
+.word a.add{
+	display: block;
+	background: url(/gfxs.png);
+	background-position: 482px 189px;
+	cursor: pointer;
+	width: 63px;
+	height: 29px;
+	border: 0px;
+	float: right;
+}
+.word a.add:hover{
+	background-position: 387px 189px;
+}
+
+
+/* ### deletions ### */
+
+
+.yesno{
+	width: 100px;
+	margin: 0px auto;
+}
+
+.deletion a.yes{
+	display: block;
+	background: url(/gfxs.png);
+	background-position: 482px 345px;
+	cursor: pointer;
+	width: 40px;
+	height: 28px;
+	border: 0px;
+	float: left;
+}
+.deletion a.yes:hover{
+	background-position: 387px 345px;
+}
+
+.deletion a.no{
+	display: block;
+	background: url(/gfxs.png);
+	background-position: 482px 306px;
+	cursor: pointer;
+	width: 40px;
+	height: 28px;
+	border: 0px;
+	float: left;
+	margin: 0 20px 0 0;
+}
+.deletion a.no:hover{
+	background-position: 387px 306px;
+}
+
+.deletion a.ok{
+	display: block;
+	background: url(/gfxs.png);
+	background-position: 482px 114px;
+	cursor: pointer;
+	width: 40px;
+	height: 28px;
+	border: 0px;
+	margin: 0px auto;
+}
+.deletion a.ok:hover{
+	background-position: 387px 114px;
 }

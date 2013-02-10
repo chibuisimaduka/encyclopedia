@@ -35,7 +35,7 @@ if($p->param('adding')){
 		
 		
 		if($res->{"id"}) {
-			print "Warning: znalazłem już podobne słowo! -> <a href='/w/".$res->{"id"}."/".$res->{"slug"}."'>".$p->param('word')."</a>";
+			print "<div class='status-info'>UWAGA: znalazłem już podobne słowo! &raquo; <a href='/w/".$res->{"id"}."/".$res->{"slug"}."'>".$res->{"word"}."</a></div><div class='clear'></div>";;
 		} else {
 		
 			#Service of relation words
@@ -60,13 +60,13 @@ if($p->param('adding')){
 				$q = $db->prepare("SELECT * FROM words WHERE id=LAST_INSERT_ID() ");
 				$q->execute();
 				$res = $q->fetchrow_hashref();
-				print "<b>Słowo zostało dodane!</b> Zobaczysz je tutaj: <a href='/w/".$res->{"id"}."/".$res->{"slug"}."'>".$res->{"word"}."</a>";
+				print "<div class='status-info success'><b>Słowo zostało dodane!</b> Zobaczysz je tutaj: <a href='/w/".$res->{"id"}."/".$res->{"slug"}."'>".$res->{"word"}."</a></div>";
 				#END insertion
 			}
 		}
 	} else {
     #Display if word or description is empty
-		print "Warning: Wybacz, jedno z pól nie zostało wypełnione!";
+		print "<div class='status-info'>UWAGA: Jedno z pól nie zostało wypełnione!</div>";
 	}
 }
 
@@ -76,11 +76,11 @@ if($p->param('adding')){
 ##########################################################################
 
 print "<h1>Dodaj nowe słowo</h1>";
-print "<form method='post'>";
+print "<form method='post' class='wadd'>";
 print "<input type='hidden' name='adding' value='1'>";
 print "<input type='hidden' name='relation' value='".join(',', @relations)."'>";
-print "<input type='text' name='word' value='".$p->param('word')."'><br />";
-print "<textarea name='description' cols='60' rows='5'>".$p->param('description')."</textarea><br />";
+print "Słowo:<br /><input type='text' name='word' value='".$p->param('word')."'><br />";
+print "Deskrypcja: <br /><textarea name='description' cols='60' rows='5'>".$p->param('description')."</textarea><br />";
 print "Wybrane relacje: ";
 
 
@@ -93,10 +93,24 @@ if(@relations){
   }
 }
 
-print "<br /><input type='text' name='r_word'><input type='submit' name='r_search' value='Szukaj Relacji'>";
-print "<input type='submit' value='Dodaj pozycję'>";
-print "</form><br><br>";
+#Searcher of relations
+print "
+  <div class='clear'></div>
+  
+  <br />
+  Wyszukaj słowo do powiązania:<br />
+  <input type='text' name='r_word'><input type='submit' name='r_search' value=' '>
+  <div class='clear'></div>
+  
+  <div class='relation-info'>INFO: Zaznaczając dane słowo powiązane, po kliknięciu \"Wprowadź zmiany \" lub \"Szukaj\" Zostanie on usunięty!</div>
+  <div class='clear'></div>
+  
+  <div class='action_but'>
+    <input type='submit' name='wadd' value=' '>
+    <div class='clear'></div>
+  </div>
+  
+</form>";
 
 
-print "<div><a href='/'>&laquo;Powróć do wyszukiwarki</a></div>";
 } 1;

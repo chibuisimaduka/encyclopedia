@@ -53,6 +53,7 @@ sub mhash {
 	return sha1_hex("sol".$_[0]."los");
 }
 
+#slug creator
 sub mslug {
   my ($string) = @_;
   $string = lc($string);
@@ -67,6 +68,30 @@ sub mslug {
   $string =~ s/ę/e/;
   $string =~ s/[-\s]+/-/g;
   return $string;
+}
+
+#Header switcher
+sub prhead{
+  
+  if($logged){
+    switch (@uris[1]) {
+      case "w"  {require "/header-m.pl";}
+      case "e"  {require "/header-m.pl";}
+      case "d"  {require "/header-m.pl";}
+      case "a"  {require "/header-m.pl";}
+      else     {require "/header-d.pl";}
+    }
+  } else {
+    require "/header-d.pl";
+  }
+}
+
+#Count word in library
+sub wordcount{
+  $q = $db->prepare("SELECT COUNT(id) AS ile FROM words");
+	$q->execute();
+	my $r = $q->fetchrow_hashref();
+  return $r->{"ile"};
 }
 
 
@@ -97,8 +122,6 @@ sub checklogged {
 #Manage includes (by $_GET from .htaccess)
 sub includer{
 
-	&extract_uri;
-
   switch (@uris[1]) {
     case "w"  {require "word.pl";}
     case "e"  {require "edit.pl";}
@@ -111,6 +134,7 @@ sub includer{
 
 #Start session after valid data
 sub start_ses {
+  if(!$logged){
 	$session = new CGI::Session(undef, undef, {Directory=>"/tmp"});
 	$session->param("id", $_[0]);
 	$session->param("user", $_[1]);
@@ -122,12 +146,14 @@ sub start_ses {
   print header(-cookie=>$cookie, -charset=>"utf-8");
 
 	$logged = 1;
+	}
 }
 
 #Logoff
 sub req_logout {
 	$session->delete();
 	$status = "Wylogowano";
+	$logout = "success";
 	$logged = 0;
 }
 
@@ -177,10 +203,24 @@ sub chk_ex_wr {
 
 #Searcher
 sub req_search {
-  $q = $db->prepare("SELECT * FROM words WHERE (word LIKE '%".$p->param('search')."%') OR (description LIKE '%".$p->param('search')."%') ");
-  $q->execute();
-  while (my $res = $q->fetchrow_hashref()){
-    print "<li><div class='cont'><a href='/w/".$res->{'id'}."/".$res->{'slug'}."'><b>".$res->{'word'}."</b> - <i>".$res->{'description'}."</i></a></div><div class='func'><a href='/e/".$res->{'id'}."/".$res->{'slug'}."'>edytuj</a> | <a href='/d/".$res->{'id'}."'>usuń</a></div><div class='clear'></div></li>";
+  if(!$p->param('search')) {
+    print "<div class='sm-bar'>Witaj w Encyklopedii! Skorzystaj z powyższej wyszukiwarki w celu odnalezienia słowa które Cię interesuje.</div>";
+  } else {
+    print "<div class='search_result'><ul>";
+    $q = $db->prepare("SELECT * FROM words WHERE (word LIKE '%".$p->param('search')."%') OR (description LIKE '%".$p->param('search')."%') ");
+    $q->execute();
+    
+    $i=0;
+    while (my $res = $q->fetchrow_hashref()){
+      $i++;
+      print "<li><div class='cont'><a class='wrd' title='Przejdź do wybranego słowa' href='/w/".$res->{'id'}."/".$res->{'slug'}."'><b>".$res->{'word'}."</b> - <i>".substr($res->{'description'},0,95)."...</i></a></div><div class='func'><a title='Edytuj' class='edit' href='/e/".$res->{'id'}."/".$res->{'slug'}."'></a><a title='Usuń' class='del' href='/d/".$res->{'id'}."'></a></div><div class='clear'></div></li>";
+    }
+    
+    if(!$i) {
+      print "<div class='status-info' style='width: 450px; margin: 15px auto 0px auto;'>Słowo nie zostało odnalezione</div>";
+    }
+    
+    print "</ul></div>";
   }
 }
 

@@ -11,7 +11,9 @@ $qp->execute();
   
   
 if($word->{"id"}){
-  print "<h1>".$word->{"word"}."</h1>";
+  print "<div class='word'>";
+  print "<a href='/a/new' class='add' title='Dodaj nowe słowo'></a><h1>".$word->{"word"}."</h1>";
+  print "<a title='Edytuj' class='edit' href='/e/".$uris[2]."/".$uris[3]."'></a><a title='Usuń' class='del' href='/d/".$uris[2]."'></a><div class='clear'></div>";
   print "<h3>".$word->{"description"}."</h3>";
   print "Wyniki powiązane: ";
   
@@ -24,9 +26,6 @@ if($word->{"id"}){
   print "Brak słowa!";
 }
 
-
-print "<br />";
-print "=" x 130;
-print "<br /><a href='/'>&laquo;Powrót do wyszukiwarki</a>";
+print "</div>";
 
 } 1;
