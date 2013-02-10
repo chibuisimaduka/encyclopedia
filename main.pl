@@ -1,3 +1,7 @@
+if(!$force){
+  print "\nMatrix has you...";
+}else{
+
 # Main
 
 print "<div class='search'>
@@ -13,3 +17,5 @@ if($p->param('search')) {&req_search;} else {print "Kliknij wyszukiwarkę aby za
 print "</ul></div>";
 
 print "<div class='clear'></div><form method='post'><input type='hidden' name='request_logout' value='1'><input type='submit' value='Logout'></form> <a href='/a/new'>Dodaj słowo +</a>";
+
+} 1;

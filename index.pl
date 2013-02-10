@@ -1,3 +1,6 @@
+#Secure V
+$force = 1;
+
 #Start includes
 require "func.pl";
 
@@ -35,5 +38,3 @@ if($logged) {&includer;}
 else {require "login.pl";}
 
 print "</div></body></html>";
-
-$db->disconnect();

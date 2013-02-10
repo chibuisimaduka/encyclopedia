@@ -1,3 +1,8 @@
+if(!$force){
+  print "\nMatrix has you...";
+}else{
+
+
 print "<form class='login' method='post'>";
 
   if($status){
@@ -9,3 +14,4 @@ print "Email: <input type='text' name='email'><br />
   Hasło: <input type='password' name='pass'><br />
   <input type='submit' value='Loguj!'>
 </form>";
+} 1;

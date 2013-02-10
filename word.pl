@@ -1,4 +1,8 @@
-my $q = $db->prepare("SELECT * FROM words WHERE id='".$p->param('wid')."' ");
+if(!$force){
+  print "\nMatrix has you...";
+}else{
+
+my $q = $db->prepare("SELECT * FROM words WHERE id='".$uris[2]."' ");
 $q->execute();
 $word = $q->fetchrow_hashref();
 
@@ -24,3 +28,5 @@ if($word->{"id"}){
 print "<br />";
 print "=" x 130;
 print "<br /><a href='/'>&laquo;Powrót do wyszukiwarki</a>";
+
+} 1;

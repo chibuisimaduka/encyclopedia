@@ -1,5 +1,10 @@
 # Overall functions for Encyclopedia project
 
+
+if(!$force){
+  print "\nMatrix has you...";
+}else{
+
 # Libs
 use DBI;
 use CGI;
@@ -7,16 +12,19 @@ use Switch;
 use CGI::Session;
 use CGI qw(:standard);
 
-# Global
-%data = ();
-
-# Class Definitions
+# $_POST definition
 $p = new CGI;
 
 $data{"email"} = $p->param('email');
 $data{"pass"} = $p->param('pass');
 
 #############################################################################
+
+
+#-------------
+#@@ overall@@#
+#-------------
+
 
 # Connect to database
 sub connect {
@@ -25,13 +33,11 @@ sub connect {
   $database ="iversopro9";
   $hostname ="localhost";
   $driver = "mysql";
-  $port ="3306";
-  $conf = "DBI:$driver:database=$database;host=$hostname;port=$port";
+  $conf = "DBI:$driver:database=$database;host=$hostname;";
   
   $db = DBI->connect($conf, $user, $password);
-
-  $tmp = $db->prepare("SET NAMES 'utf8'");
-  $tmp->execute();
+  $q = $db->prepare("SET NAMES 'utf8'");
+  $q->execute();
 }
 
 #extracting uri to array
@@ -47,24 +53,27 @@ sub mhash {
 	return sha1_hex("sol".$_[0]."los");
 }
 
-sub mslug($) {
-  use Unicode::Normalize;
+sub mslug {
   my ($string) = @_;
-	$string = NFKD($string);
-  $string =~ tr/\000-\177//cd;
-  $string =~ s/[^\w\s-]//g;
-  $string =~ s/^\s+|\s+$//g;
   $string = lc($string);
+  $string =~ s/ń/n/;
+  $string =~ s/ć/c/;
+  $string =~ s/ź/z/;
+  $string =~ s/ż/z/;
+  $string =~ s/ł/l/;
+  $string =~ s/ą/a/;
+  $string =~ s/ó/o/;
+  $string =~ s/ś/s/;
+  $string =~ s/ę/e/;
   $string =~ s/[-\s]+/-/g;
   return $string;
 }
 
-sub rem_dup{
-	my @tmparr = @_[0];
-	my %hash = map { $_ => 1 } @tmparr;
-	@uniq = keys %hash;
-	return @uniq;
-}
+
+#------------
+#@@ index @@#
+#------------
+
 
 # Check is logged
 sub checklogged {
@@ -115,6 +124,27 @@ sub start_ses {
 	$logged = 1;
 }
 
+#Logoff
+sub req_logout {
+	$session->delete();
+	$status = "Wylogowano";
+	$logged = 0;
+}
+
+
+#---------------
+#@@ add/edit @@#
+#---------------
+
+
+#removing duplicates entry
+sub rem_dup{
+	my @tmparr = @_[0];
+	my %hash = map { $_ => 1 } @tmparr;
+	@uniq = keys %hash;
+	return @uniq;
+}
+
 #Validating entered data
 sub req_login {
 		
@@ -130,12 +160,20 @@ sub req_login {
 		
 }
 
-#Logoff
-sub req_logout {
-	$session->delete();
-	$status = "Wylogowano";
-	$logged = 0;
+#Check existing word if modify word name
+sub chk_ex_wr {
+  $q = $db->prepare("SELECT * FROM words WHERE (word LIKE '".$_[0]."') ");
+	$q->execute();
+	my $res = $q->fetchrow_hashref();
+	if($res->{"id"}) {return 1;}
+	else {return 0;}
 }
+
+
+#------------
+#@@ main @@#
+#------------
+
 
 #Searcher
 sub req_search {
@@ -148,10 +186,5 @@ sub req_search {
 
 
 
-
-
-
-
-
-
+}
 1;
